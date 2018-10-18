@@ -1,4 +1,4 @@
-package com.example.vikramgupta.sample.model
+package com.example.vikramgupta.sample.repo.model
 
 import com.google.gson.annotations.SerializedName
 

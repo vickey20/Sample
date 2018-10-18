@@ -4,9 +4,9 @@ import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
 import android.util.Log
-import com.example.vikramgupta.sample.model.CountriesResponse
-import com.example.vikramgupta.sample.model.Country
-import com.example.vikramgupta.sample.network.XoomNetworkService
+import com.example.vikramgupta.sample.repo.model.CountriesResponse
+import com.example.vikramgupta.sample.repo.model.Country
+import com.example.vikramgupta.sample.repo.network.XoomNetworkService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

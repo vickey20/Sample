@@ -1,6 +1,6 @@
-package com.example.vikramgupta.sample.network
+package com.example.vikramgupta.sample.repo.network
 
-import com.example.vikramgupta.sample.model.CountriesResponse
+import com.example.vikramgupta.sample.repo.model.CountriesResponse
 import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Retrofit

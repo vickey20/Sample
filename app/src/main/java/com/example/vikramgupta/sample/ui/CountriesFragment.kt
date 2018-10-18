@@ -12,8 +12,8 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.example.vikramgupta.sample.R
-import com.example.vikramgupta.sample.adapter.CountriesAdapter
-import com.example.vikramgupta.sample.model.Country
+import com.example.vikramgupta.sample.ui.adapter.CountriesAdapter
+import com.example.vikramgupta.sample.repo.model.Country
 import com.example.vikramgupta.sample.viewmodel.CountriesViewModel
 
 import kotlinx.android.synthetic.main.fragment_countries.*

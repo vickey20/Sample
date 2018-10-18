@@ -1,4 +1,4 @@
-package com.example.vikramgupta.sample.adapter
+package com.example.vikramgupta.sample.ui.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.example.vikramgupta.sample.R
-import com.example.vikramgupta.sample.model.Country
-import com.example.vikramgupta.sample.network.XoomNetworkService
+import com.example.vikramgupta.sample.repo.model.Country
+import com.example.vikramgupta.sample.repo.network.XoomNetworkService
 import kotlinx.android.synthetic.main.countries_list_item.view.*
 
 /**
