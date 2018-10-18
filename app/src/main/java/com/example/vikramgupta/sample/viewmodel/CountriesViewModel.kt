@@ -44,13 +44,14 @@ class CountriesViewModel(application: Application): AndroidViewModel(application
                     Log.d("CountriesViewModel", "Response returned unsuccessful")
                     return
                 }
-                var countriesResponse = response.body()
-                countries.postValue(countriesResponse?.items)
+                val countriesResponse = response.body()
+                val filteredCountries = countriesResponse?.let { filterActiveCountries(it.items) }
+                countries.postValue(filteredCountries)
             }
 
         })
         return countries
     }
 
-
+    private fun filterActiveCountries(countries: List<Country>): List<Country> = countries.filter { it.disbursementOptions != null }
 }
