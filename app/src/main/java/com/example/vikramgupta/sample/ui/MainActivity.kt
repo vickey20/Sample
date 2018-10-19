@@ -3,7 +3,7 @@ package com.example.vikramgupta.sample.ui
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.example.vikramgupta.sample.R
-import com.example.vikramgupta.sample.model.Country
+import com.example.vikramgupta.sample.repo.model.db.Country
 
 class MainActivity : AppCompatActivity(), CountriesFragment.OnFragmentInteractionListener {
     override fun onCountrySelected(country: Country) {

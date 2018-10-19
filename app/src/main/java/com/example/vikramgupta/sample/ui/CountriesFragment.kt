@@ -12,8 +12,9 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.example.vikramgupta.sample.R
-import com.example.vikramgupta.sample.adapter.CountriesAdapter
-import com.example.vikramgupta.sample.model.Country
+import com.example.vikramgupta.sample.ui.adapter.CountriesAdapter
+import com.example.vikramgupta.sample.repo.model.db.Country
+import com.example.vikramgupta.sample.ui.adapter.ViewType
 import com.example.vikramgupta.sample.viewmodel.CountriesViewModel
 
 import kotlinx.android.synthetic.main.fragment_countries.*
@@ -24,7 +25,20 @@ import kotlinx.android.synthetic.main.fragment_countries.*
 class CountriesFragment : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
 
-    private var adapter: CountriesAdapter? = null
+    private var adapter = CountriesAdapter { position, viewType ->
+        when(viewType) {
+            ViewType.ROW -> onItemClick(position)
+            ViewType.FAVORITE -> onFavoriteClick(position)
+        }
+    }
+
+    private fun onFavoriteClick(position: Int) {
+        viewModel.onFavoriteClick(position)
+    }
+
+    private fun onItemClick(position: Int) {
+        // TODO open songs detail page
+    }
 
     private lateinit var viewModel: CountriesViewModel
 
@@ -43,13 +57,12 @@ class CountriesFragment : Fragment() {
         setupRecyclerView()
 
         viewModel = ViewModelProviders.of(this).get(CountriesViewModel::class.java)
-        viewModel.getCountries().observe(this, Observer { countries -> countries?.let { adapter?.updateList(it) } })
+        viewModel.loadCountries()?.observe(this, Observer { countries -> countries?.let { adapter?.updateList(it) } })
     }
 
     private fun setupRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.addItemDecoration(DividerItemDecoration(recyclerView.context, DividerItemDecoration.VERTICAL))
-        adapter = CountriesAdapter()
         recyclerView.adapter = adapter
     }
 

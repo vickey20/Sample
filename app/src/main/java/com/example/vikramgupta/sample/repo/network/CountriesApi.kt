@@ -1,7 +1,7 @@
-package com.example.vikramgupta.sample.network
+package com.example.vikramgupta.sample.repo.network
 
-import com.example.vikramgupta.sample.model.CountriesResponse
-import com.example.vikramgupta.sample.network.XoomNetworkService.COUNTRIES_API
+import com.example.vikramgupta.sample.repo.model.CountriesResponse
+import com.example.vikramgupta.sample.repo.network.XoomNetworkService.COUNTRIES_API
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
