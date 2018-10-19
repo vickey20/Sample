@@ -15,7 +15,8 @@ object XoomNetworkService {
     private var retrofit: Retrofit? = null
     private const val BASE_URL = "https://mobile.xoom.com/"
     const val COUNTRIES_API = "/catalog/v2/countries"
-    private const val COUNTRY_FLAG_BASE_URL = "https://www.countryflags.io"
+    private const val COUNTRY_FLAG_BASE_URL = "https://www.countryflags.io/"
+    private const val FLAG_FLAT_64 = "/flat/64.png"
 
     private fun getRetrofit(): Retrofit {
         return retrofit?: Retrofit.Builder()
@@ -27,7 +28,7 @@ object XoomNetworkService {
     }
 
     private fun getCountriesApi(): CountriesApi? {
-        return getRetrofit()?.create(CountriesApi::class.java)
+        return getRetrofit().create(CountriesApi::class.java)
     }
 
     fun getCountries(page: Int, pageSize: Int): Call<CountriesResponse>? {
@@ -36,7 +37,7 @@ object XoomNetworkService {
 
     private fun getPicasso(): Picasso = Picasso.get()
 
-    private fun getFlagUrl(countryCode: String) = "$COUNTRY_FLAG_BASE_URL/$countryCode/flat/64.png"
+    private fun getFlagUrl(countryCode: String) = "$COUNTRY_FLAG_BASE_URL$countryCode$FLAG_FLAT_64"
 
     fun loadImageUrlForCountry(countryCode: String) = getPicasso().load(getFlagUrl(countryCode))!!
 }

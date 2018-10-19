@@ -10,9 +10,9 @@ import com.example.vikramgupta.sample.repo.model.db.DatabaseConstants.DATABASE_N
  *   Created by vikramgupta on 10/17/18.
  */
 
-@Database(entities = arrayOf(ActiveCountry::class), version = 1)
+@Database(entities = arrayOf(Country::class), version = 1)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun activeCountryDao(): ActiveCountryDao
+    abstract fun countryDao(): CountryDao
 
     companion object {
         @Volatile private var instance: AppDatabase? = null
@@ -35,9 +35,9 @@ object DatabaseConstants {
     const val DATABASE_NAME = "sample-db"
 
     // Tables
-    const val TABLE_ACTIVE_COUNTRIES = "active_countries"
+    const val TABLE_COUNTRIES = "countries"
 
     // Fields
     const val FAVORITE = "favorite"
-    const val CODE = "code"
+    const val NAME = "name"
 }

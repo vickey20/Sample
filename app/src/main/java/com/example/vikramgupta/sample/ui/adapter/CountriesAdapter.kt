@@ -6,14 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.example.vikramgupta.sample.R
-import com.example.vikramgupta.sample.repo.model.Country
-import com.example.vikramgupta.sample.repo.network.XoomNetworkService
+import com.example.vikramgupta.sample.repo.CountriesRepo
+import com.example.vikramgupta.sample.repo.model.db.Country
 import kotlinx.android.synthetic.main.countries_list_item.view.*
 
 /**
  *   Created by vikramgupta on 10/16/18.
  */
-class CountriesAdapter: RecyclerView.Adapter<CountriesAdapter.ViewHolder>() {
+
+enum class ViewType(val type: Int) {
+    ROW(1),
+    FAVORITE(2)
+}
+
+class CountriesAdapter(val onClick: (Int, ViewType) -> Unit): RecyclerView.Adapter<CountriesAdapter.ViewHolder>() {
 
     private var countries = mutableListOf<Country>()
 
@@ -24,9 +30,20 @@ class CountriesAdapter: RecyclerView.Adapter<CountriesAdapter.ViewHolder>() {
     }
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        fun bind(country: Country) {
+        fun bind(country: Country, position: Int) {
             itemView.name.text = country.name
             itemView.image.loadFlag(country.code)
+            setFavorite(country.favorite)
+
+            itemView.favorite.setOnClickListener { onClick(position, ViewType.FAVORITE) }
+
+        }
+
+        private fun setFavorite(favorite: Int) {
+            if (favorite == 1)
+                itemView.favorite.setImageResource(R.drawable.star_filled_96)
+            else
+                itemView.favorite.setImageResource(R.drawable.star_96)
         }
     }
 
@@ -39,7 +56,7 @@ class CountriesAdapter: RecyclerView.Adapter<CountriesAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(countries[position])
+        holder.bind(countries[position], position)
     }
 
     private fun ViewGroup.inflate(layoutId: Int): View {
@@ -47,8 +64,7 @@ class CountriesAdapter: RecyclerView.Adapter<CountriesAdapter.ViewHolder>() {
     }
 
     private fun ImageView.loadFlag(countryCode: String) {
-        XoomNetworkService.loadImageUrlForCountry(countryCode).into(this)
+        CountriesRepo.getInstance(this.context).loadImageUrlForCountry(countryCode).into(this)
     }
-
 
 }

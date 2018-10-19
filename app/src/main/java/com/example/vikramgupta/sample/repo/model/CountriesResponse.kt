@@ -6,10 +6,10 @@ import com.google.gson.annotations.SerializedName
  *   Created by vikramgupta on 10/15/18.
  */
 
-data class CountriesResponse(var items: List<Country>)
+data class CountriesResponse(var items: List<CountryItem>)
 
-data class Country(var name: String,
-                   var code: String,
+data class CountryItem(var code: String,
+                   var name: String,
                    @SerializedName("disbursement_options")
                    var disbursementOptions: List<DisbursementOptions>?)
 

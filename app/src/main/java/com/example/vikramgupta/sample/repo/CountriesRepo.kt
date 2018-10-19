@@ -2,9 +2,13 @@ package com.example.vikramgupta.sample.repo
 
 import android.arch.lifecycle.LiveData
 import android.content.Context
-import com.example.vikramgupta.sample.repo.model.db.ActiveCountry
-import com.example.vikramgupta.sample.repo.model.db.ActiveCountryDao
+import com.example.vikramgupta.sample.repo.model.db.Country
+import com.example.vikramgupta.sample.repo.model.db.CountryDao
 import com.example.vikramgupta.sample.repo.model.db.AppDatabase
+import com.example.vikramgupta.sample.repo.network.XoomNetworkService
+import kotlinx.coroutines.experimental.GlobalScope
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 
 /**
  *   Created by vikramgupta on 10/17/18.
@@ -14,35 +18,38 @@ class CountriesRepo {
 
     companion object {
         @Volatile private var instance: CountriesRepo? = null
-        private lateinit var db: AppDatabase
+        private var db: AppDatabase? = null
+        private var countryDao: CountryDao? = null
 
         fun getInstance(context: Context): CountriesRepo {
             return instance?: synchronized(this) {
                 instance?: CountriesRepo().also {
                     instance = it
-                    db = AppDatabase.getDatabase(context)
+                    db = AppDatabase.getDatabase(context.applicationContext)
+                    countryDao = db?.countryDao()
                 }
             }
         }
     }
 
-    private var activeCountryDao: ActiveCountryDao
-    private var activeCountries: LiveData<List<ActiveCountry>>
+    /* Database */
+    fun loadCountriesFromDB(): LiveData<List<Country>>? = countryDao?.loadCountries()
 
-    init {
-        activeCountryDao = db.activeCountryDao()
-        activeCountries = activeCountryDao.loadActiveCountries()
+
+    fun saveAll(countries: List<Country>) {
+        GlobalScope.launch {
+            async { countryDao?.insertAll(countries) }
+        }
     }
 
-    private fun loadActiveCountries(): LiveData<List<ActiveCountry>> {
-        return activeCountryDao.loadActiveCountries()
+    fun updateCountry(country: Country) {
+        GlobalScope.launch {
+            async { countryDao?.update(country) }
+        }
     }
 
-    private fun saveActiveCountries(activeCountries: List<ActiveCountry>) {
-        activeCountryDao.insertAll(activeCountries)
-    }
+    /* Network */
+    fun loadCountriesFromNetwork(page: Int, pageSize: Int) = XoomNetworkService.getCountries(page, pageSize)
 
-    private fun updateCountry(country: ActiveCountry) {
-        activeCountryDao.update(country)
-    }
+    fun loadImageUrlForCountry(countryCode: String) = XoomNetworkService.loadImageUrlForCountry(countryCode)
 }
