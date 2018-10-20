@@ -36,9 +36,7 @@ class CountriesFragment : Fragment() {
         viewModel.onFavoriteClick(position)
     }
 
-    private fun onItemClick(position: Int) {
-        // TODO open songs detail page
-    }
+    private fun onItemClick(position: Int) {}
 
     private lateinit var viewModel: CountriesViewModel
 
