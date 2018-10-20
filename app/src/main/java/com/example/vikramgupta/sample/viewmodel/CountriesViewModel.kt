@@ -3,6 +3,8 @@ package com.example.vikramgupta.sample.viewmodel
 import android.app.Application
 import android.arch.lifecycle.*
 import android.util.Log
+import com.example.vikramgupta.sample.filterActiveCountries
+import com.example.vikramgupta.sample.getDiff
 import com.example.vikramgupta.sample.repo.CountriesRepo
 import com.example.vikramgupta.sample.repo.model.CountriesResponse
 import com.example.vikramgupta.sample.repo.model.CountryItem
@@ -76,41 +78,19 @@ class CountriesViewModel(application: Application): AndroidViewModel(application
         val countriesResponse = response.body()
 
         // We need to pick countries that have active disbursement options.
-        val activeCountries = countriesResponse?.let { filterActiveCountries(it.items) as MutableList<CountryItem>? }
+        val activeCountries = countriesResponse?.let { filterActiveCountries(it.items) as MutableList<CountryItem> }
 
         // Before saving them to DB we pick the items which are not present in DB and only insert those items. This reduces database operations.
-        val diff = getDiff(activeCountries, mediatorLiveData?.value)
-        diff?.let { saveAll(it) }
+        val diff = getDiff(activeCountries, mediatorLiveData.value)
+        saveAll(diff)
     }
 
     /**
      * Save countries to DB
      */
     private fun saveAll(countries: List<Country>) {
-        countries.let { countriesRepo?.saveAll(it) }
+        countriesRepo?.saveAll(countries)
     }
-
-    /**
-     * Do a diff between listA fetched from network and listB fetched from DB.
-     * Return a list containing the items in listA not present in listB (DB)
-     */
-    private fun getDiff(listA: List<CountryItem>?, listB: List<Country>?): List<Country>? {
-        val codes = listB?.map { it.code }?.toSet()
-        val diff = mutableListOf<Country>()
-        listA?.forEach {
-            if (codes == null || codes.isEmpty())
-                diff.add(Country(it.code, it.name, 0))
-            else {
-                if (!codes.contains(it.code)) diff.add(Country(it.code, it.name, 0))
-            }
-        }
-        return diff
-    }
-
-    /**
-     * Filter out countries that don't have active disbursement options.
-     */
-    private fun filterActiveCountries(countries: List<CountryItem>): List<CountryItem>? = countries.filter { it.disbursementOptions != null }
 
     /**
      * Call this when the server updates data so that we can update our database.
