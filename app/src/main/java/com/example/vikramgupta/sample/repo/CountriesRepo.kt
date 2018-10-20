@@ -25,7 +25,7 @@ class CountriesRepo {
             return instance?: synchronized(this) {
                 instance?: CountriesRepo().also {
                     instance = it
-                    db = AppDatabase.getDatabase(context.applicationContext)
+                    db = AppDatabase.getDatabase(context)
                     countryDao = db?.countryDao()
                 }
             }
